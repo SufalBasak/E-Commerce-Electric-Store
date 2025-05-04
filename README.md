@@ -1,3 +1,3 @@
 # E-Commerce-Electric-Store
 
- electricduniya0.netlify.app
+ electricduniya0.netlify.app 
