@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Commerce Store</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Arial, sans-serif;
+      }
+
+      body {
+        line-height: 1.6;
+        background: linear-gradient(135deg, #21afec 0%, #0b58ff 100%);
+        color: #333;
+      }
+
+      header {
+        background: #2c3e50;
+        color: #fff;
+        padding: 1rem;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      nav h1 {
+        font-size: 1.8rem;
+        font-weight: 600;
+      }
+
+      .nav-links a {
+        color: #fff;
+        text-decoration: none;
+        margin-left: 1.5rem;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: #3498db;
+      }
+
+      .cart-icon {
+        position: relative;
+      }
+
+      .cart-count {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: #e74c3c;
+        color: #fff;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 0.8rem;
+      }
+
+      .hero {
+        height: 100vh;
+        background: url("https://i.ibb.co/CK34Q0Hp/home-page.jpg") no-repeat
+          center center/cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #fff;
+        margin-top: 60px;
+        position: relative;
+      }
+
+      .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(44, 62, 80, 0.6);
+        z-index: 1;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 3rem 4rem;
+        border-radius: 15px;
+        backdrop-filter: blur(8px);
+        max-width: 700px;
+        animation: fadeIn 1s ease-in;
+      }
+
+      .hero-content h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .hero-content p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .products,
+      .auth-section,
+      .contact-section,
+      .dashboard-section {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+      }
+
+      .product-card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .product-card img {
+        max-width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+
+      .product-card h3 {
+        margin: 0.75rem 0;
+        font-size: 1.2rem;
+      }
+
+      .product-card p {
+        color: #666;
+        margin-bottom: 1rem;
+      }
+
+      .add-to-cart,
+      .auth-button,
+      .contact-button {
+        background: #3498db;
+        color: #fff;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        cursor: pointer;
+        border-radius: 5px;
+        font-weight: 500;
+        transition: background 0.3s;
+      }
+
+      .add-to-cart:hover,
+      .auth-button:hover,
+      .contact-button:hover {
+        background: #2980b9;
+      }
+
+      .auth-form,
+      .contact-form {
+        max-width: 400px;
+        margin: 2rem auto;
+        background: #fff;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .auth-form input,
+      .contact-form input,
+      .contact-form textarea {
+        width: 100%;
+        padding: 0.75rem;
+        margin: 0.5rem 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+
+      .cart-modal,
+      .auth-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+      }
+
+      .cart-content,
+      .auth-content {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 10px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .cart-item {
+        display: flex;
+        justify-content: space-between;
+        margin: 1rem 0;
+        padding: 0.5rem;
+        border-bottom: 1px solid #eee;
+      }
+
+      .cart-total {
+        font-weight: 600;
+        margin: 1rem 0;
+        font-size: 1.1rem;
+      }
+
+      .close-cart,
+      .close-auth {
+        float: right;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: #666;
+      }
+
+      .close-cart:hover,
+      .close-auth:hover {
+        color: #333;
+      }
+
+      .dashboard-content {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .dashboard-content h3 {
+        margin-bottom: 1rem;
+        color: #2c3e50;
+      }
+
+      .order-history {
+        margin-top: 2rem;
+      }
+
+      .order-history li {
+        padding: 0.75rem;
+        border-bottom: 1px solid #eee;
+        background: #f9f9f9;
+        border-radius: 5px;
+        margin-bottom: 0.5rem;
+      }
+
+      footer {
+        background: #2c3e50;
+        color: #fff;
+        text-align: center;
+        padding: 2rem;
+        margin-top: 2rem;
+      }
+
+      footer p {
+        margin: 0.5rem 0;
+      }
+
+      @media (max-width: 768px) {
+        .nav-links a {
+          margin-left: 1rem;
+          font-size: 0.9rem;
+        }
+
+        .hero-content h1 {
+          font-size: 2rem;
+        }
+
+        .hero-content {
+          padding: 2rem;
+        }
+
+        .hero-buttons {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .product-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <h1>Electric Duniya(Basak Store)</h1>
+        <div class="nav-links">
+          <a href="#home">Home</a>
+          <a href="#products">Products</a>
+          <a href="#contact">Contact</a>
+          <a href="#dashboard">Dashboard</a>
+          <a href="#" onclick="showAuthModal('login')">Login</a>
+          <a href="#" onclick="showAuthModal('register')">Register</a>
+          <a href="#" class="cart-icon" onclick="toggleCart()">
+            Cart <span class="cart-count">0</span>
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <section class="hero" id="home">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1>Shop the Future Today</h1>
+        <p>Explore our exclusive range of premium products designed for you</p>
+        <div class="hero-buttons">
+          <a href="#products" class="add-to-cart">Shop Now</a>
+          <a href="#products" class="add-to-cart" style="background: #e74c3c"
+            >View Deals</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="products" id="products">
+      <h2>Our Products</h2>
+      <div class="product-grid" id="product-grid">
+        <!-- Products will be dynamically added here -->
+      </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+      <h2>Contact Us</h2>
+      <form class="contact-form" id="contact-form">
+        <input type="text" id="contact-name" placeholder="Your Name" required />
+        <input
+          type="email"
+          id="contact-email"
+          placeholder="Your Email"
+          required
+        />
+        <textarea
+          id="contact-message"
+          placeholder="Your Message"
+          rows="5"
+          required
+        ></textarea>
+        <button type="submit" class="contact-button">Send Message</button>
+      </form>
+    </section>
+
+    <section class="dashboard-section" id="dashboard">
+      <h2>Your Dashboard</h2>
+      <div class="dashboard-content" id="dashboard-content">
+        <h3>Welcome, <span id="user-name">Guest</span>!</h3>
+        <p>Email: <span id="user-email">Not logged in</span></p>
+        <h3>Order History</h3>
+        <ul class="order-history" id="order-history">
+          <li>No orders yet</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="cart-modal" id="cart-modal">
+      <div class="cart-content">
+        <span class="close-cart" onclick="toggleCart()">×</span>
+        <h2>Your Cart</h2>
+        <div id="cart-items"></div>
+        <p class="cart-total">Total: $0.00</p>
+        <button class="add-to-cart" onclick="checkout()">Checkout</button>
+      </div>
+    </div>
+
+    <div class="auth-modal" id="auth-modal">
+      <div class="auth-content">
+        <span class="close-auth" onclick="closeAuthModal()">×</span>
+        <h2 id="auth-title">Login</h2>
+        <div class="auth-form">
+          <input type="email" id="auth-email" placeholder="Email" required />
+          <input
+            type="password"
+            id="auth-password"
+            placeholder="Password"
+            required
+          />
+          <input
+            type="text"
+            id="auth-name"
+            placeholder="Full Name"
+            style="display: none"
+          />
+          <button class="auth-button" onclick="handleAuth()">Submit</button>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>© 2025 E-Shop. All rights reserved Made with ❤️ Sufal Basak</p>
+      <p>Contact: sufalbasak@gmail.com</p>
+    </footer>
+
+    <script>
+      const products = [
+        {
+          id: 1,
+          name: "Wireless Headphones",
+          price: 59.99,
+          image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df",
+        },
+        {
+          id: 2,
+          name: "Smart Watch",
+          price: 129.99,
+          image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12",
+        },
+        {
+          id: 3,
+          name: "Laptop",
+          price: 899.99,
+          image: "https://i.ibb.co/whNYxGrz/laptop.jpg",
+        },
+        {
+          id: 4,
+          name: "Smartphone",
+          price: 699.99,
+          image: "https://i.ibb.co/vvXkPHzF/phone.jpg",
+        },
+        {
+          id: 5,
+          name: "Headset",
+          price: 199.99,
+          image: "https://i.ibb.co/BKBkJZMP/headset.jpg",
+        },
+        {
+          id: 6,
+          name: "tab",
+          price: 799.99,
+          image: "https://i.ibb.co/0jVNY8yz/Tab.jpg",
+        },
+        {
+          id: 7,
+          name: "Keyboard",
+          price: 49.99,
+          image: "https://i.ibb.co/4n5q8fTj/Keyboard.jpg",
+        },
+        {
+          id: 8,
+          name: "Mouse",
+          price: 39.99,
+          image: "https://i.ibb.co/DDG48bJF/mouse.jpg",
+        },
+      ];
+
+      let cart = [];
+      let user = null;
+      let orders = [];
+
+      function renderProducts() {
+        const productGrid = document.getElementById("product-grid");
+        productGrid.innerHTML = "";
+        products.forEach((product) => {
+          const productCard = document.createElement("div");
+          productCard.className = "product-card";
+          productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>Price: $${product.price.toFixed(2)}</p>
+                    <button class="add-to-cart" onclick="addToCart(${
+                      product.id
+                    })">Add to Cart</button>
+                `;
+          productGrid.appendChild(productCard);
+        });
+      }
+
+      function addToCart(productId) {
+        const product = products.find((p) => p.id === productId);
+        const cartItem = cart.find((item) => item.id === productId);
+
+        if (cartItem) {
+          cartItem.quantity++;
+        } else {
+          cart.push({ ...product, quantity: 1 });
+        }
+
+        updateCart();
+      }
+
+      function updateCart() {
+        const cartItems = document.getElementById("cart-items");
+        const cartCount = document.querySelector(".cart-count");
+        const cartTotal = document.querySelector(".cart-total");
+
+        cartItems.innerHTML = "";
+        let total = 0;
+        let itemCount = 0;
+
+        cart.forEach((item) => {
+          total += item.price * item.quantity;
+          itemCount += item.quantity;
+          const cartItem = document.createElement("div");
+          cartItem.className = "cart-item";
+          cartItem.innerHTML = `
+                    <span>${item.name} (x${item.quantity})</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+          cartItems.appendChild(cartItem);
+        });
+
+        cartCount.textContent = itemCount;
+        cartTotal.textContent = `Total: $${total.toFixed(2)}`;
+      }
+
+      function toggleCart() {
+        const cartModal = document.getElementById("cart-modal");
+        cartModal.style.display =
+          cartModal.style.display === "flex" ? "none" : "flex";
+      }
+
+      function checkout() {
+        if (!user) {
+          alert("Please login to checkout!");
+          showAuthModal("login");
+          return;
+        }
+        if (cart.length === 0) {
+          alert("Your cart is empty!");
+        } else {
+          orders.push([...cart]);
+          updateDashboard();
+          alert("Thank you for your purchase!");
+          cart = [];
+          updateCart();
+          toggleCart();
+        }
+      }
+
+      function showAuthModal(type) {
+        const authModal = document.getElementById("auth-modal");
+        const authTitle = document.getElementById("auth-title");
+        const authName = document.getElementById("auth-name");
+
+        authTitle.textContent = type === "login" ? "Login" : "Register";
+        authName.style.display = type === "register" ? "block" : "none";
+        authModal.style.display = "flex";
+      }
+
+      function closeAuthModal() {
+        const authModal = document.getElementById("auth-modal");
+        authModal.style.display = "none";
+        document.getElementById("auth-email").value = "";
+        document.getElementById("auth-password").value = "";
+        document.getElementById("auth-name").value = "";
+      }
+
+      function handleAuth() {
+        const email = document.getElementById("auth-email").value;
+        const password = document.getElementById("auth-password").value;
+        const name = document.getElementById("auth-name").value;
+        const authTitle = document.getElementById("auth-title").textContent;
+
+        if (authTitle === "Register" && name && email && password) {
+          user = { name, email };
+          alert("Registration successful! Please login.");
+          closeAuthModal();
+          showAuthModal("login");
+        } else if (authTitle === "Login" && email && password) {
+          user = { name: "User", email };
+          updateDashboard();
+          alert("Login successful!");
+          closeAuthModal();
+        } else {
+          alert("Please fill in all fields!");
+        }
+      }
+
+      function updateDashboard() {
+        if (user) {
+          document.getElementById("user-name").textContent = user.name;
+          document.getElementById("user-email").textContent = user.email;
+        }
+
+        const orderHistory = document.getElementById("order-history");
+        orderHistory.innerHTML = "";
+        if (orders.length === 0) {
+          orderHistory.innerHTML = "<li>No orders yet</li>";
+        } else {
+          orders.forEach((order, index) => {
+            const li = document.createElement("li");
+            li.textContent = `Order #${index + 1}: ${order
+              .map((item) => `${item.name} (x${item.quantity})`)
+              .join(", ")}`;
+            orderHistory.appendChild(li);
+          });
+        }
+      }
+
+      document
+        .getElementById("contact-form")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+          const name = document.getElementById("contact-name").value;
+          const email = document.getElementById("contact-email").value;
+          const message = document.getElementById("contact-message").value;
+
+          if (name && email && message) {
+            alert("Message sent successfully!");
+            document.getElementById("contact-form").reset();
+          } else {
+            alert("Please fill in all fields!");
+          }
+        });
+
+      // Initialize
+      renderProducts();
+    </script>
+  </body>
+</html>
